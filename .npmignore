@@ -5,3 +5,5 @@ src/
 .eslintrc
 .prettierrc
 tsconfig.json
+keys/
+public/
