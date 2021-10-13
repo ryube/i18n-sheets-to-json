@@ -3,3 +3,4 @@ dist/
 .jest/
 keys/
 public/
+.DS_Store
