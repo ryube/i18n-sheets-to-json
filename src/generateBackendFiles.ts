@@ -8,6 +8,7 @@ export type GenerateFile = {
   langIndex: number;
   beautify: number;
   filename?: string;
+  removeNamespaces?: string[];
 };
 
 export async function generateBackendFiles({
@@ -37,7 +38,7 @@ export async function generateBackendFiles({
     const key = row[keyIndex];
 
     // For each language
-    for (let j = langIndex; j < row.length; j++) {
+    for (let j = langIndex; j < header.length; j++) {
       const lang = header[j];
       const value = row[j];
 

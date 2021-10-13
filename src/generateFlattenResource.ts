@@ -31,7 +31,7 @@ export async function generateFlattenResource({
     const key = row[keyIndex];
 
     // For each language
-    for (let j = langIndex; j < row.length; j++) {
+    for (let j = langIndex; j < header.length; j++) {
       const lang = header[j];
       const value = row[j];
 
