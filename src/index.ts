@@ -1,17 +1,19 @@
 import { getSheet } from './google';
 import { generateBackendFiles, GenerateFile } from './generateBackendFiles';
 import { generateLocalResource } from './generateLocalResource';
+import { generateVueI18n } from './generateVueI18n';
 
-// const config: Config = {
-//   keyFilePath: './keys/bngdev-ecf08cb4b4f0.json',
-//   spreadsheetId: '1hK73eFibNRTln_7NFOD_QEzYB5bjvTfdNeYYhgL6Pj8',
-//   outputPath: './public/locales',
-// };
+const config: Config = {
+  keyFilePath: './keys/bngdev-ecf08cb4b4f0.json',
+  spreadsheetId: '1hK73eFibNRTln_7NFOD_QEzYB5bjvTfdNeYYhgL6Pj8',
+  outputPath: './public/locales',
+};
 
 type Config = {
   keyFilePath: string;
   spreadsheetId: string;
   outputPath?: string;
+  filename?: string;
   keyIndex?: number;
   langIndex?: number;
   beautify?: number;
@@ -27,6 +29,7 @@ async function sheetsLoop({
   keyIndex = 0,
   langIndex = 1,
   beautify = 0,
+  filename,
   generateFile,
 }: I18nToJson) {
   const { sheetTitles, docs } = await getSheet(keyFilePath, spreadsheetId);
@@ -46,6 +49,7 @@ async function sheetsLoop({
         keyIndex,
         langIndex,
         beautify,
+        filename,
       });
     }
   }
@@ -58,4 +62,11 @@ function i18nForBackend(config: Config) {
 function i18nForResource(config: Config) {
   sheetsLoop({ ...config, generateFile: generateLocalResource });
 }
+
+function i18nForVue(config: Config) {
+  sheetsLoop({ ...config, generateFile: generateVueI18n });
+}
+
+i18nForVue(config);
+
 export { getSheet, i18nForBackend, i18nForResource };

@@ -2,14 +2,14 @@ import fs from 'fs';
 import { GenerateFile } from './generateBackendFiles';
 import { mergeDeep } from './util/mergeDeep';
 
-export async function generateLocalResource({
+export async function generateVueI18n({
   rows = [],
   namespace = '',
   outputPath = '',
   keyIndex = 0,
   langIndex = 1,
   beautify = 0,
-  filename = 'resource',
+  filename = 'lang',
 }: GenerateFile) {
   if (rows.length === 0) {
     throw new Error('No data found in spreadsheet');
@@ -22,7 +22,6 @@ export async function generateLocalResource({
   for (let i = langIndex; i < header.length; i++) {
     const lang = header[i];
     translations[lang] = {};
-    translations[lang][namespace] = {};
   }
 
   // For each data row
@@ -36,7 +35,7 @@ export async function generateLocalResource({
       const value = row[j];
 
       // Generate and add sub-object to translations
-      translations[lang][namespace][key] = value;
+      translations[lang][`${namespace}.${key}`] = value;
     }
   }
 

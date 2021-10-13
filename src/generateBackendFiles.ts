@@ -7,6 +7,7 @@ export type GenerateFile = {
   keyIndex: number;
   langIndex: number;
   beautify: number;
+  filename?: string;
 };
 
 export async function generateBackendFiles({
