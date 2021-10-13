@@ -31,7 +31,6 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
-    "googleapis": "^88.2.0",
-    "log-beautify": "^1.2.0"
+    "googleapis": "^88.2.0"
   }
 }
