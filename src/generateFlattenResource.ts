@@ -2,7 +2,7 @@ import fs from 'fs';
 import { GenerateFile } from './generateBackendFiles';
 import { mergeDeep } from './util/mergeDeep';
 
-export async function generateVueI18n({
+export async function generateFlattenResource({
   rows = [],
   namespace = '',
   outputPath = '',
@@ -10,6 +10,7 @@ export async function generateVueI18n({
   langIndex = 1,
   beautify = 0,
   filename = 'lang',
+  removeNamespaces,
 }: GenerateFile) {
   if (rows.length === 0) {
     throw new Error('No data found in spreadsheet');
@@ -35,7 +36,11 @@ export async function generateVueI18n({
       const value = row[j];
 
       // Generate and add sub-object to translations
-      translations[lang][`${namespace}.${key}`] = value;
+      if (removeNamespaces && removeNamespaces.includes(namespace)) {
+        translations[lang][`${key}`] = value;
+      } else {
+        translations[lang][`${namespace}.${key}`] = value;
+      }
     }
   }
 
