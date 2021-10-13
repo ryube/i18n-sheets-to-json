@@ -11,6 +11,10 @@
     "name": "ryube",
     "email": "ryubeing@gmail.com"
   },
+  "keywords": [
+    "google spreadsheet",
+    "i18n"
+  ],
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^27.0.2",
@@ -27,6 +31,7 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
-    "googleapis": "^88.2.0"
+    "googleapis": "^88.2.0",
+    "log-beautify": "^1.2.0"
   }
 }
