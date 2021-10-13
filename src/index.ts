@@ -1,19 +1,7 @@
 import { getSheet } from './google';
 import { generateBackendFiles, GenerateFile } from './generateBackendFiles';
 import { generateLocalResource } from './generateLocalResource';
-import { generateVueI18n } from './generateVueI18n';
-import log from 'log-beautify';
-
-log.setSymbols({
-  success: '👍 ',
-  info: '✅ ',
-});
-
-// const config: Config = {
-//   keyFilePath: './keys/bngdev-ecf08cb4b4f0.json',
-//   spreadsheetId: '1hK73eFibNRTln_7NFOD_QEzYB5bjvTfdNeYYhgL6Pj8',
-//   outputPath: './public/locales',
-// };
+import { generateFlattenResource } from './generateFlattenResource';
 
 type Config = {
   keyFilePath: string;
@@ -23,6 +11,8 @@ type Config = {
   keyIndex?: number;
   langIndex?: number;
   beautify?: number;
+  removeNamespaces?: string[];
+  includeSheets?: string[];
 };
 
 type Callback = (param: GenerateFile) => Promise<void>;
@@ -36,17 +26,36 @@ async function sheetsLoop({
   langIndex = 1,
   beautify = 0,
   filename,
+  removeNamespaces,
+  includeSheets,
   generateFile,
 }: I18nToJson) {
-  log.info('output path : ', { path: outputPath });
+  console.info('🐮 output path : ', { path: outputPath });
+
   const { sheetTitles, docs } = await getSheet(keyFilePath, spreadsheetId);
+  console.info('🧾 sheet list');
+  console.table(sheetTitles);
+
   for (let i = 0; i < sheetTitles.length; i++) {
     const namespace = String(sheetTitles[i]);
+
+    const includeSheetsOption = () =>
+      !includeSheets ||
+      (includeSheets?.length > 0 && includeSheets.includes(namespace));
+
+    // If the option is defined, skip the sheet that is not included.
+    if (!includeSheetsOption()) {
+      console.info('🥶 skip sheet :', namespace);
+      continue;
+    }
+
     const resData = await docs.spreadsheets.values.get({
       spreadsheetId,
       range: namespace,
     });
+
     const rows = resData.data.values;
+
     if (rows) {
       await generateFile({
         rows,
@@ -56,9 +65,13 @@ async function sheetsLoop({
         langIndex,
         beautify,
         filename,
+        removeNamespaces,
       });
+
+      console.info(
+        `\x1b[36m 🤩 sheet: \x1b[34m '${namespace}' ➡ \x1b[35m done !`
+      );
     }
-    log.success(`${namespace} done !`);
   }
 }
 
@@ -69,7 +82,7 @@ async function sheetsLoop({
  * @param config
  */
 function i18nForBackend(config: Config) {
-  log.info('download google sheet for i18n backend !');
+  console.info('✅ download google sheet for i18n backend !');
 
   sheetsLoop({ ...config, generateFile: generateBackendFiles });
 }
@@ -80,7 +93,7 @@ function i18nForBackend(config: Config) {
  * @param config
  */
 function i18nForResource(config: Config) {
-  log.info('download google sheet for i18n resource !');
+  console.info('✅ download google sheet for i18n resource !');
   sheetsLoop({ ...config, generateFile: generateLocalResource });
 }
 
@@ -89,8 +102,16 @@ function i18nForResource(config: Config) {
  * @param config
  */
 function i18nForFlatten(config: Config) {
-  log.info('download google sheet for i18n flatten resource !');
-  sheetsLoop({ ...config, generateFile: generateVueI18n });
+  console.info('✅ download google sheet for i18n flatten resource !');
+  sheetsLoop({ ...config, generateFile: generateFlattenResource });
 }
+
+// const doc = '1mLrfzwPJmIkCExk5Qvcv3GIuBelnP1xJ_BWj2bp-61E';
+// const doc1 = '1hK73eFibNRTln_7NFOD_QEzYB5bjvTfdNeYYhgL6Pj8';
+// const config: Config = {
+//   keyFilePath: './keys/bngdev-ecf08cb4b4f0.json',
+//   spreadsheetId: doc,
+//   outputPath: './public/locales',
+// };
 
 export { getSheet, i18nForBackend, i18nForResource, i18nForFlatten };
