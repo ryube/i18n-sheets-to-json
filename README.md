@@ -25,6 +25,7 @@ const {
   i18nForResource,
   i18nForFlatten,
 } = require('@ryube/i18n-sheets-to-json');
+
 const config = {
   keyFilePath: './google-spreadsheet-service-account-key.json',
   spreadsheetId: 'id',
@@ -38,4 +39,20 @@ i18nForFlatten(config);
 
 ```
 node i18n-download.js
+```
+
+## config option
+
+```js
+type Config = {
+  keyFilePath: string,
+  spreadsheetId: string,
+  outputPath?: string,
+  filename?: string,
+  keyIndex?: number, // 0
+  langIndex?: number, // 1
+  beautify?: number, // 0 : JSON.stringify indent space
+  removeNamespaces?: string[], // filter sheet name for flatten function
+  includeSheets?: string[], // default all sheet, If you define a sheet name, parse only that.
+};
 ```
