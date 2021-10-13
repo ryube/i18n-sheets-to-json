@@ -1,6 +1,6 @@
 {
   "name": "@ryube/i18n-sheets-to-json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Convert the i18n document to json for i18next.",
   "main": "./dist/index.js",
   "scripts": {
