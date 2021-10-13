@@ -31,9 +31,9 @@ const config = {
   outputPath: './public/locales',
 };
 
-i18nForBackend(config),
-i18nForResource(config),
-i18nForFlatten(config),
+i18nForBackend(config);
+i18nForResource(config);
+i18nForFlatten(config);
 ```
 
 ```
